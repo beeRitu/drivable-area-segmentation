@@ -33,6 +33,7 @@ import json
 import datetime
 import numpy as np
 import skimage.draw
+import tensorflow as tf
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("../../")
@@ -60,10 +61,17 @@ class BddConfig(Config):
     """
     # Give the configuration a recognizable name
     NAME = "bdd"
+    
+    # NUMBER OF GPUs to use. When using only a CPU, this needs to be set to 1.
+    GPU_COUNT = 1
 
     # We use a GPU with 12GB memory, which can fit two images.
     # Adjust down if you use a smaller GPU.
     IMAGES_PER_GPU = 2
+    
+    #Input image resizing 
+    IMAGE_MIN_DIM = 200
+    IMAGE_MAX_DIM = 256
 
     # Number of classes (including background)
     NUM_CLASSES = 1 + 1  # Background + balloon
@@ -216,9 +224,10 @@ def train(model):
     # COCO trained weights, we don't need to train too long. Also,
     # no need to train all layers, just the heads should do it.
     print("Training network heads")
-    model.train(dataset_train, dataset_val,
+    with tf.device("/gpu:0"):
+        model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
-                epochs=30,
+                epochs=60,
                 layers='heads')
 
 ############################################################
@@ -277,7 +286,8 @@ if __name__ == '__main__':
 
     # Create model
     if args.command == "train":
-        model = modellib.MaskRCNN(mode="training", config=config,
+        with tf.device("/gpu:0"):
+            model = modellib.MaskRCNN(mode="training", config=config,
                                   model_dir=args.logs)
     else:
         model = modellib.MaskRCNN(mode="inference", config=config,
