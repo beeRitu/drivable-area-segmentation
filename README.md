@@ -6,7 +6,7 @@ The repository includes:
 * [inspect_bdd_data.ipynb](inspect_bdd_data.ipynb) visualize the training data and masks
 * [inspect_bdd_model.ipynb](inspect_bdd_model.ipynb) visualizes the detection pipeline at every step
 * [shrink.ipynb](shrink.ipynb) creates label files from the master label file corresponding to images in a folder. 
-* Training code for BDD 
+* [bdd.py](bdd.py) Training code for BDD 
 # Getting started 
 In order to run transfer learning on [Mask R-CNN](https://arxiv.org/abs/1703.06870) 
 ## Clone matterport Mask-RCNN repo
@@ -36,9 +36,25 @@ In addition, copy the 2 label files in the path indicated below
 /Mask_RCNN/datasets/bdd/bdd100k_labels_images_val.json #labels for all 10,000 validation images
 ```
 ## Visualize the training data 
-You can create a small subset of the training data for the initial visualization. To do this, rename the folder `train` containging 70k training images to something like `train70k` and copy a subset of training images to the folder `train`. 1000 images might be a good starting point. Run shrink.ipynb to create a shortened version of the label file corresponding to the number of images 'train'. This will create file named `via_region_data.json` in folder `train`. Check the following assignments before running the notebook
+You can create a small subset of the training data for the initial visualization. To do this, rename the folder `train` containging 70k training images to something like `train70k` and copy a subset of training images to the folder `train`. 1000 images might be a good starting point. Run shrink.ipynb to create a shortened version of the label file corresponding to the number of images in `train`. This will create file named `via_region_data.json` in folder `train`. Check the following assignments before running the notebook
 ```bash
 master_json="bdd100k_labels_images_train.json" # label file for 70k images in /Mask_RCNN/datasets/bdd/
 dataset_dir=os.path.abspath("../../datasets/bdd/train") # image folder where json file will be created
 output_json="via_region_data" # Name of the output json file 
 ```
+## Training the model 
+We started the training from pretrained MS COCO models. Training and evaluation code is in `samples/bdd/bdd.py`. Training can be started directly from command line as such:
+```
+# Train a new model on bdd dataset starting from pre-trained COCO weights
+python3 samples/bdd/bdd.py train --dataset=/datasets/bdd/ --weights='coco'
+
+# Continue training a model that you had trained earlier
+python3 samples/bdd/bdd.py train --dataset=/datasets/bdd/ --weights=/path/to/weights.h5
+
+# Continue training the last model you trained. This will find
+# the last trained weights in the model directory.
+python3 samples/bdd/bdd.py train --dataset=/datasets/bdd/ --weights='last'
+```
+The training schedule, learning rate, and other parameters should be set in `samples/bdd/bdd.py`.
+## Visualizing the model
+## Results and Analysis 
