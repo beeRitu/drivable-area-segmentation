@@ -5,6 +5,7 @@ This project implements driving area segmentation by applying on transfer learni
 The repository includes:
 * [inspect_bdd_data.ipynb](inspect_bdd_data.ipynb) visualize the training data and masks
 * [inspect_bdd_model.ipynb](inspect_bdd_model.ipynb) visualizes the detection pipeline at every step
+* [inspect_bdd_results.ipynb](inspect_bdd_results.ipynb) analyzes segmentation results on the validation dataset.
 * [shrink.ipynb](shrink.ipynb) creates label files from the master label file corresponding to images in a folder. 
 * [bdd.py](bdd.py) Training code for BDD 
 # Getting started 
@@ -49,12 +50,11 @@ We started the training from pretrained MS COCO models. Training and evaluation 
 python3 samples/bdd/bdd.py train --dataset=/datasets/bdd/ --weights='coco'
 
 # Continue training a model that you had trained earlier
-python3 samples/bdd/bdd.py train --dataset=/datasets/bdd/ --weights=/path/to/weights.h5
+python3 samples/bdd/bdd.py train --dataset=/datasets/bdd/ --weights=logs/<weights directory>/<weights.h5 file to be used>
 
-# Continue training the last model you trained. This will find
-# the last trained weights in the model directory.
-python3 samples/bdd/bdd.py train --dataset=/datasets/bdd/ --weights='last'
 ```
 The training schedule, learning rate, and other parameters should be set in `samples/bdd/bdd.py`.
 ## Visualizing the model
+Model can be visualized by running the notebook [inspect_bdd_model.ipynb](inspect_bdd_model.ipynb). It generates results for the intermediate and final steps in the model.
 ## Results and Analysis 
+Results can be analyzed by running the notebook [inspect_bdd_results.ipynb](inspect_bdd_results.ipynb)
