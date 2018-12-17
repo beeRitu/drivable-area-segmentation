@@ -60,24 +60,30 @@ class BddConfig(Config):
     Derives from the base Config class and overrides some values.
     """
     # Give the configuration a recognizable name
-    NAME = "bdd"
+    NAME = "imgpgpu4_val10k_train100k_epochs200"
     
     # NUMBER OF GPUs to use. When using only a CPU, this needs to be set to 1.
     GPU_COUNT = 1
 
     # We use a GPU with 12GB memory, which can fit two images.
     # Adjust down if you use a smaller GPU.
-    IMAGES_PER_GPU = 2
+    IMAGES_PER_GPU = 4
     
     #Input image resizing 
     IMAGE_MIN_DIM = 200
     IMAGE_MAX_DIM = 256
+    
+    # Number of training steps per epoch
+    # This doesn't need to match the size of the training set. Tensorboard
+    # updates are saved at the end of each epoch, so setting this to a
+    # smaller number means getting more frequent TensorBoard updates.
+    # Validation stats are also calculated at each epoch end and they
+    # might take a while, so don't set this too small to avoid spending
+    # a lot of time on validation stats.
+    STEPS_PER_EPOCH = 100
 
     # Number of classes (including background)
-    NUM_CLASSES = 1 + 1  # Background + balloon
-
-    # Number of training steps per epoch
-    STEPS_PER_EPOCH = 100
+    NUM_CLASSES = 1 + 1  # Background + driving area
 
     # Skip detections with < 90% confidence
     DETECTION_MIN_CONFIDENCE = 0.9
@@ -227,7 +233,7 @@ def train(model):
     with tf.device("/gpu:0"):
         model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
-                epochs=60,
+                epochs=200,
                 layers='heads')
 
 ############################################################
