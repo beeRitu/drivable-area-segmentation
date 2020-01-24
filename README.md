@@ -1,5 +1,5 @@
 # drivable-area-segmentation
-This project implements driving area segmentation by applying on transfer learning on [Mask R-CNN](https://arxiv.org/abs/1703.06870) model [here](https://github.com/matterport/Mask_RCNN). We have used [Berkeley Driving Dataset](http://bdd-data.berkeley.edu/), for rest of the project acronym BDD has been used. 
+This project implements driving area segmentation by applying on transfer learning on [Mask R-CNN](https://arxiv.org/abs/1703.06870) model [here](https://github.com/matterport/Mask_RCNN). This work was done as a part of [CS230 class at Stanford](https://cs230.stanford.edu/), winter 2019. Project report can be found [here](https://github.com/beeRitu/drivable-area-segmentation/blob/master/CS230_Project_Report_Winter_2018.pdf) on GitHub and is also posted on [class past projects page](https://cs230.stanford.edu/past-projects/#winter-2019) as of on the day of writing this update. We have used [Berkeley Driving Dataset](http://bdd-data.berkeley.edu/), for rest of the project acronym BDD has been used. 
 ![Instance Segmentation Sample](assets/DrivableArea.JPG)
 
 The repository includes:
